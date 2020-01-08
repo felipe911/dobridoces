@@ -1,20 +1,50 @@
 package br.com.dobridoces.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.istack.NotNull;
 
 @Entity
+@Table(name = "ORDEM_COMPRA")
 public class OrdemCompra {
 
+	@Id
+	@JsonProperty
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@ManyToOne
+	@JoinColumn(name = "ID_CLIENTE", referencedColumnName = "id", nullable = false)
 	private Cliente cliente;
-	private List<Brigadeiro> brigadeiros;
-	private List<Long> qtdBrigadeiros;
-	private Double valorRecebido;
-	private Double valorVenda;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "PEDIDO_ID")
+	private List<Pedido> pedidos;
+
+	@NotNull
+	@Column(name = "VALOR_RECEBIDO")
+	private BigDecimal valorRecebido;
+
+	@NotNull
+	@Column(name = "VALOR_VENDA")
+	private BigDecimal valorVenda;
+
+	@NotNull
+	@Column(name = "DATA_VENDA")
 	private LocalDate dataVenda;
 
 	public long getId() {
@@ -33,35 +63,27 @@ public class OrdemCompra {
 		this.cliente = cliente;
 	}
 
-	public List<Brigadeiro> getBrigadeiros() {
-		return brigadeiros;
+	public List<Pedido> getPedidos() {
+		return pedidos;
 	}
 
-	public void setBrigadeiros(List<Brigadeiro> brigadeiros) {
-		this.brigadeiros = brigadeiros;
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
-	public List<Long> getQtdBrigadeiros() {
-		return qtdBrigadeiros;
-	}
-
-	public void setQtdBrigadeiros(List<Long> qtdBrigadeiros) {
-		this.qtdBrigadeiros = qtdBrigadeiros;
-	}
-
-	public Double getValorRecebido() {
+	public BigDecimal getValorRecebido() {
 		return valorRecebido;
 	}
 
-	public void setValorRecebido(Double valorRecebido) {
+	public void setValorRecebido(BigDecimal valorRecebido) {
 		this.valorRecebido = valorRecebido;
 	}
 
-	public Double getValorVenda() {
+	public BigDecimal getValorVenda() {
 		return valorVenda;
 	}
 
-	public void setValorVenda(Double valorVenda) {
+	public void setValorVenda(BigDecimal valorVenda) {
 		this.valorVenda = valorVenda;
 	}
 
@@ -77,11 +99,10 @@ public class OrdemCompra {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((brigadeiros == null) ? 0 : brigadeiros.hashCode());
 		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + ((dataVenda == null) ? 0 : dataVenda.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((qtdBrigadeiros == null) ? 0 : qtdBrigadeiros.hashCode());
+		result = prime * result + ((pedidos == null) ? 0 : pedidos.hashCode());
 		result = prime * result + ((valorRecebido == null) ? 0 : valorRecebido.hashCode());
 		result = prime * result + ((valorVenda == null) ? 0 : valorVenda.hashCode());
 		return result;
@@ -96,11 +117,6 @@ public class OrdemCompra {
 		if (getClass() != obj.getClass())
 			return false;
 		OrdemCompra other = (OrdemCompra) obj;
-		if (brigadeiros == null) {
-			if (other.brigadeiros != null)
-				return false;
-		} else if (!brigadeiros.equals(other.brigadeiros))
-			return false;
 		if (cliente == null) {
 			if (other.cliente != null)
 				return false;
@@ -113,10 +129,10 @@ public class OrdemCompra {
 			return false;
 		if (id != other.id)
 			return false;
-		if (qtdBrigadeiros == null) {
-			if (other.qtdBrigadeiros != null)
+		if (pedidos == null) {
+			if (other.pedidos != null)
 				return false;
-		} else if (!qtdBrigadeiros.equals(other.qtdBrigadeiros))
+		} else if (!pedidos.equals(other.pedidos))
 			return false;
 		if (valorRecebido == null) {
 			if (other.valorRecebido != null)
