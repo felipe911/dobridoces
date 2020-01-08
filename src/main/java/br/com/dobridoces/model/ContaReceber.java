@@ -1,15 +1,40 @@
 package br.com.dobridoces.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.istack.NotNull;
 
 @Entity
+@Table(name = "CONTA_RECEBER")
 public class ContaReceber {
 
+	@Id
+	@JsonProperty
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	@OneToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "ID_CLIENTE")
 	private Cliente cliente;
-	private Double valorAReceber;
+	
+	@NotNull
+	@Column(name = "VALOR_RECEBER")
+	private BigDecimal valorAReceber;
+	
+	@NotNull
+	@Column(name = "DATA_RECEBIMENTO")
 	private LocalDate dataRecebimento;
 
 	public long getId() {
@@ -27,12 +52,12 @@ public class ContaReceber {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-
-	public Double getValorAReceber() {
+	
+	public BigDecimal getValorAReceber() {
 		return valorAReceber;
 	}
 
-	public void setValorAReceber(Double valorAReceber) {
+	public void setValorAReceber(BigDecimal valorAReceber) {
 		this.valorAReceber = valorAReceber;
 	}
 
@@ -51,7 +76,6 @@ public class ContaReceber {
 		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + ((dataRecebimento == null) ? 0 : dataRecebimento.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((valorAReceber == null) ? 0 : valorAReceber.hashCode());
 		return result;
 	}
 
@@ -76,12 +100,6 @@ public class ContaReceber {
 			return false;
 		if (id != other.id)
 			return false;
-		if (valorAReceber == null) {
-			if (other.valorAReceber != null)
-				return false;
-		} else if (!valorAReceber.equals(other.valorAReceber))
-			return false;
 		return true;
 	}
-
 }
